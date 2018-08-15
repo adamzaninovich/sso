@@ -2,11 +2,10 @@ defmodule Sso.Credentials.Credential do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "credentials" do
-    field :email, :string
-    field :password_hash, :string
-    field :sso_id, Ecto.UUID
+    field(:email, :string)
+    field(:password_hash, :string)
+    field(:sso_id, Ecto.UUID)
 
     timestamps()
   end
@@ -16,6 +15,15 @@ defmodule Sso.Credentials.Credential do
     credential
     |> cast(attrs, [:email, :password_hash, :sso_id])
     |> validate_required([:email, :password_hash, :sso_id])
+    |> unique_constraint(:email)
+    |> create_sso_id()
+    |> validate_required([:sso_id])
     |> unique_constraint(:sso_id)
   end
+
+  defp create_sso_id(%{valid?: true, data: %{sso_id: nil}} = changeset) do
+    put_change(changeset, :sso_id, Ecto.UUID.generate())
+  end
+
+  defp create_token(changeset), do: changeset
 end

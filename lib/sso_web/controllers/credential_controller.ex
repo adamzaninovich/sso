@@ -20,6 +20,7 @@ defmodule SsoWeb.CredentialController do
         conn
         |> put_flash(:info, "Credential created successfully.")
         |> redirect(to: credential_path(conn, :show, credential))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
@@ -28,6 +29,11 @@ defmodule SsoWeb.CredentialController do
   def show(conn, %{"id" => id}) do
     credential = Credentials.get_credential!(id)
     render(conn, "show.html", credential: credential)
+  end
+
+  def api_show(conn, %{"sso_id" => sso_id}) do
+    credential = Credentials.get_credential_by_sso_id(sso_id)
+    render(conn, "show.json", credential: credential)
   end
 
   def edit(conn, %{"id" => id}) do
@@ -44,6 +50,7 @@ defmodule SsoWeb.CredentialController do
         conn
         |> put_flash(:info, "Credential updated successfully.")
         |> redirect(to: credential_path(conn, :show, credential))
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", credential: credential, changeset: changeset)
     end
