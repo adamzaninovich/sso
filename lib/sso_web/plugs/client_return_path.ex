@@ -5,10 +5,10 @@ defmodule SsoWeb.Plug.ClientReturnPath do
   plug(Plug.Logger)
 
   def call(
-        %{params: %{"client_login" => login, "client_create_user" => create_user}} = conn,
+        %{params: %{"client_continue" => continue, "client_create_user" => create_user}} = conn,
         _opts
       ) do
-    put_session(conn, :client_paths, %{login: login, create_user: create_user})
+    put_session(conn, :client_paths, %{continue: continue, create_user: create_user})
   end
 
   def call(conn, _opts) do

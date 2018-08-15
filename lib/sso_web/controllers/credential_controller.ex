@@ -33,7 +33,8 @@ defmodule SsoWeb.CredentialController do
   end
 
   def api_show(conn, %{"sso_id" => sso_id}) do
-    render(conn, "show.json", credential: conn.assigns[:current_credential])
+    credential = Credentials.get_credential_by_sso_id(sso_id)
+    render(conn, "show.json", credential: credential)
   end
 
   def edit(conn, %{"id" => id}) do

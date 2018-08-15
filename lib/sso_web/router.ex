@@ -14,6 +14,7 @@ defmodule SsoWeb.Router do
     plug(:put_secure_browser_headers)
     plug(Sso.Auth.Pipeline)
     plug(SsoWeb.Plug.ClientReturnPath)
+    plug(Sso.Plug.AllowIframe)
   end
 
   pipeline :api do
@@ -36,6 +37,6 @@ defmodule SsoWeb.Router do
   scope "/api", SsoWeb do
     pipe_through(:api)
 
-    get("/credentials/show/:sso_id", CredentialController, :api_show)
+    get("/credentials/:sso_id", CredentialController, :api_show)
   end
 end

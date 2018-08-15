@@ -22,7 +22,7 @@ defmodule Sso.Credentials do
   end
 
   def get_credential_by_sso_id(sso_id) do
-    Repo.get_by(Credential, :sso_id, sso_id)
+    Repo.get_by(Credential, sso_id: sso_id)
   end
 
   def verify_credential(email, password) do

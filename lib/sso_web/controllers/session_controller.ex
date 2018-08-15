@@ -18,7 +18,7 @@ defmodule SsoWeb.SessionController do
       {:ok, credential} ->
         conn
         |> Sso.Auth.Guardian.Plug.sign_in(credential)
-        |> redirect(external: return_path(conn).login)
+        |> redirect(external: "#{return_path(conn).continue}?sso_id=#{credential.sso_id}")
 
       {:error, _message} ->
         conn
