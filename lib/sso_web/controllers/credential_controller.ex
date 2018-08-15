@@ -26,9 +26,10 @@ defmodule SsoWeb.CredentialController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    credential = Credentials.get_credential!(id)
-    render(conn, "show.html", credential: credential)
+  # iframe show
+  def show(conn, _params) do
+    credential = conn.assigns[:current_credential] || %{sso_id: "no session"}
+    render(conn, "show.html", credential: credential, layout: false)
   end
 
   def api_show(conn, %{"sso_id" => sso_id}) do

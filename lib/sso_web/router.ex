@@ -23,11 +23,11 @@ defmodule SsoWeb.Router do
     # Use the default browser stack
     pipe_through(:browser)
 
-    resources("/credentials", CredentialController, only: [:new, :create])
+    resources("/credentials", CredentialController, only: [:new, :create, :show])
 
     pipe_through(:ensure_authenticated)
     get("/", CredentialController, :index)
-    resources("/credentials", CredentialController, except: [:new, :create])
+    resources("/credentials", CredentialController, except: [:new, :create, :show])
   end
 
   # Other scopes may use custom stacks.
