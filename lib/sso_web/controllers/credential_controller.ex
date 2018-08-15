@@ -16,10 +16,10 @@ defmodule SsoWeb.CredentialController do
 
   def create(conn, %{"credential" => credential_params}) do
     case Credentials.create_credential(credential_params) do
-      {:ok, credential} ->
+      {:ok, _credential} ->
         conn
         |> put_flash(:info, "Credential created successfully.")
-        |> redirect(to: credential_path(conn, :show, credential))
+        |> redirect(external: return_path(conn).create_user)
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -33,8 +33,7 @@ defmodule SsoWeb.CredentialController do
   end
 
   def api_show(conn, %{"sso_id" => sso_id}) do
-    credential = Credentials.get_credential_by_sso_id(sso_id)
-    render(conn, "show.json", credential: credential)
+    render(conn, "show.json", credential: conn.assigns[:current_credential])
   end
 
   def edit(conn, %{"id" => id}) do
@@ -64,5 +63,9 @@ defmodule SsoWeb.CredentialController do
     conn
     |> put_flash(:info, "Credential deleted successfully.")
     |> redirect(to: credential_path(conn, :index))
+  end
+
+  defp return_path(conn) do
+    get_session(conn, :client_paths)
   end
 end

@@ -21,6 +21,20 @@ defmodule Sso.Credentials do
     Repo.all(Credential)
   end
 
+  def get_credential_by_sso_id(sso_id) do
+    Repo.get_by(Credential, :sso_id, sso_id)
+  end
+
+  def verify_credential(email, password) do
+    email
+    |> get_credential_by_email()
+    |> Comeonin.Bcrypt.check_pass(password, hide_user: true)
+  end
+
+  def get_credential_by_email(email) do
+    Repo.get_by(Credential, email: email)
+  end
+
   @doc """
   Gets a single credential.
 

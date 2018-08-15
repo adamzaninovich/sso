@@ -12,7 +12,8 @@ defmodule SsoWeb.Router do
     plug(:fetch_flash)
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
-    plug(JointRegistry.Auth.Pipeline)
+    plug(Sso.Auth.Pipeline)
+    plug(SsoWeb.Plug.ClientReturnPath)
   end
 
   pipeline :api do
@@ -24,6 +25,7 @@ defmodule SsoWeb.Router do
     pipe_through(:browser)
 
     resources("/credentials", CredentialController, only: [:new, :create, :show])
+    resources("/sessions", SessionController, only: [:new, :create, :delete])
 
     pipe_through(:ensure_authenticated)
     get("/", CredentialController, :index)
@@ -34,6 +36,6 @@ defmodule SsoWeb.Router do
   scope "/api", SsoWeb do
     pipe_through(:api)
 
-    get("/credentials/show", CredentialController, :api_show)
+    get("/credentials/show/:sso_id", CredentialController, :api_show)
   end
 end

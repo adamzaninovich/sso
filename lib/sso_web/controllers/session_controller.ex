@@ -7,16 +7,18 @@ defmodule SsoWeb.SessionController do
   #
   # plug(:put_layout, "blank.html")
 
+  alias Sso.Credentials
+
   def new(conn, _) do
     render(conn, "new.html")
   end
 
   def create(conn, %{"credential" => %{"email" => email, "password" => password}}) do
-    case Credentials.validate(email, password) do
+    case Credentials.verify_credential(email, password) do
       {:ok, credential} ->
         conn
         |> Sso.Auth.Guardian.Plug.sign_in(credential)
-        |> redirect(to: return_path(conn))
+        |> redirect(external: return_path(conn).login)
 
       {:error, _message} ->
         conn
@@ -31,7 +33,7 @@ defmodule SsoWeb.SessionController do
     |> redirect(to: "/")
   end
 
-  def return_path(conn) do
-    :ok
+  defp return_path(conn) do
+    get_session(conn, :client_paths)
   end
 end

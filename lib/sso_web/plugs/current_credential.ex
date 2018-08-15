@@ -9,6 +9,6 @@ defmodule SsoWeb.Plug.CurrentCredential do
 
   def call(conn, _opts) do
     credential = Guardian.Plug.current_resource(conn)
-    assign(conn, :current_credential, current_credential)
+    assign(conn, :current_credential, credential)
   end
 end

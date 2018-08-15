@@ -1,1 +1,9 @@
 /* This file is for your main application css. */
+
+body {
+  background-color: #071B2A !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: white !important;
+}
